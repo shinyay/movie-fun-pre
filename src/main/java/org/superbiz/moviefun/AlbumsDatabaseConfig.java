@@ -1,6 +1,8 @@
 package org.superbiz.moviefun;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -18,7 +20,9 @@ public class AlbumsDatabaseConfig {
     public DataSource albumsDataSource(DatabaseServiceCredentials serviceCredentials) {
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setURL(serviceCredentials.jdbcUrl("albums-mysql"));
-        return dataSource;
+        HikariConfig config = new HikariConfig();
+        config.setDataSource(dataSource);
+        return new HikariDataSource(config);
     }
 
     @Bean
